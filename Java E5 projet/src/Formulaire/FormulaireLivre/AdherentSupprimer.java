@@ -80,14 +80,13 @@ public class AdherentSupprimer {
         comboBox.addItem("--- Choisissez un adhérent à supprimer ICI --- ");
     
         try (Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
-            String sql = "SELECT * FROM adherent";
+            String sql = "SELECT nom, prenom FROM adherent";
             try (PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    String adh_num = rs.getString("Adh_num");
                     String nom = rs.getString("nom");
                     String prenom = rs.getString("prenom");
                     // Ajoutez le nom et le prénom à l'élément de la liste dans le JComboBox
-                    comboBox.addItem(adh_num + ": " + nom + " " + prenom);
+                    comboBox.addItem(nom + " " + prenom);
                 }
             }
         } catch (SQLException e) {

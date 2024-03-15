@@ -1,4 +1,4 @@
-package Formulaire.FormulaireAdherent;
+package Formulaire.FormulaireAuteur;
 
 import javax.swing.*;
 import java.awt.*;
@@ -6,21 +6,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
 
-public class AdherentSupprimer {
+public class AuteurSupprimer {
     private static final String URL = "jdbc:mysql://localhost:3306/bibliotheques-java";
     private static final String USERNAME = "root";
     private static final String PASSWORD = "root";
 
     public void initialize() {
         // Création de la fenêtre Supprimer
-        JFrame frame = new JFrame("Page Supprimer (Adhérent)");
+        JFrame frame = new JFrame("Page Supprimer (Auteur)");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         // Création du panneau principal avec BorderLayout
         JPanel panel = new JPanel(new BorderLayout());
 
         // Ajout d'un texte au-dessus du menu déroulant
-        JLabel label = new JLabel("Sélectionnez l'adhérent à supprimer :", SwingConstants.CENTER); // Centrage horizontal
+        JLabel label = new JLabel("Sélectionnez l'auteur à supprimer :", SwingConstants.CENTER); // Centrage horizontal
         label.setFont(label.getFont().deriveFont(Font.BOLD, 16)); // Agrandir le texte
         panel.add(label, BorderLayout.NORTH);
 
@@ -49,12 +49,12 @@ public class AdherentSupprimer {
 
                 // Appel de la méthode pour supprimer l'élément de la base de données
                 try {
-                    supprimerAdherent(elementASupprimer);
+                    supprimerAuteur(elementASupprimer);
                     // Fermer la fenêtre après la suppression réussie
                     frame.dispose();
                 } catch (SQLException ex) {
                     ex.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Erreur lors de la suppression de l'adhérent.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Erreur lors de la suppression de l'auteur.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -77,17 +77,17 @@ public class AdherentSupprimer {
 
     private void remplirComboBox(JComboBox<String> comboBox) {
         // Ajouter la valeur par défaut au début de la liste
-        comboBox.addItem("--- Choisissez un adhérent à supprimer ICI --- ");
+        comboBox.addItem("--- Choisissez un auteur à supprimer ICI --- ");
     
         try (Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
-            String sql = "SELECT * FROM adherent";
+            String sql = "SELECT * FROM auteur";
             try (PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    String adh_num = rs.getString("Adh_num");
+                    String aut_num = rs.getString("Aut_num");
                     String nom = rs.getString("nom");
                     String prenom = rs.getString("prenom");
                     // Ajoutez le nom et le prénom à l'élément de la liste dans le JComboBox
-                    comboBox.addItem(adh_num + ": " + nom + " " + prenom);
+                    comboBox.addItem(aut_num + ": " + nom + " " + prenom);
                 }
             }
         } catch (SQLException e) {
@@ -96,27 +96,27 @@ public class AdherentSupprimer {
     }
     
 
-    private void supprimerAdherent(String nomPrenomAdherent) throws SQLException {
+    private void supprimerAuteur(String nomPrenomAuteur) throws SQLException {
         // Extraire le nom et le prénom de l'élément sélectionné
-        String[] parts = nomPrenomAdherent.split(" ");
+        String[] parts = nomPrenomAuteur.split(" ");
         String nom = parts[0];
         String prenom = parts[1];
 
         // Connexion à la base de données
         try (Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
-            // Création de la requête SQL DELETE pour supprimer l'adhérent
-            String sql = "DELETE FROM adherent WHERE nom = ? AND prenom = ?";
+            // Création de la requête SQL DELETE pour supprimer l'auteur
+            String sql = "DELETE FROM auteur WHERE nom = ? AND prenom = ?";
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                // Remplacer les paramètres ? par le nom et le prénom de l'adhérent à supprimer
+                // Remplacer les paramètres ? par le nom et le prénom de l'auteur à supprimer
                 stmt.setString(1, nom);
                 stmt.setString(2, prenom);
 
                 // Exécuter la requête de suppression
                 int rowsAffected = stmt.executeUpdate();
                 if (rowsAffected > 0) {
-                    JOptionPane.showMessageDialog(null, "Adhérent supprimé avec succès.", "Succès", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Auteur supprimé avec succès.", "Succès", JOptionPane.INFORMATION_MESSAGE);
                 } else {
-                    JOptionPane.showMessageDialog(null, "Aucun adhérent avec le nom et le prénom spécifiés trouvé.", "Avertissement", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Aucun auteur avec le nom et le prénom spécifiés trouvé.", "Avertissement", JOptionPane.WARNING_MESSAGE);
                 }
             }
         }

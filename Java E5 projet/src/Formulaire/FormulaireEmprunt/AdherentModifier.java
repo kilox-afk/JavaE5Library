@@ -100,7 +100,7 @@ public class AdherentModifier {
 
     private void ouvrirInterfaceModification(int adherentId) {
         // Créer une nouvelle instance de votre interface de modification
-        AdherentModificationInterface modificationInterface = new AdherentModificationInterface(adherentId);
+        AuteurModificationInterface modificationInterface = new AuteurModificationInterface(adherentId);
         // Appeler la méthode initialize() pour afficher l'interface de modification
         modificationInterface.initialize();
     }

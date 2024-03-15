@@ -1,4 +1,4 @@
-package Formulaire.FormulaireAdherent;
+package Formulaire.FormulaireAuteur;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -12,7 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class AdherentPage {
+public class AuteurPage {
     private JTable table;
     private DefaultTableModel tableModel;
 
@@ -21,7 +21,7 @@ public class AdherentPage {
     private static final String PASSWORD = "root";
 
     public void initialize() {
-        JFrame frame = new JFrame("Page Adhérent");
+        JFrame frame = new JFrame("Page Auteur");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JPanel panel = new JPanel(new BorderLayout());
@@ -37,7 +37,7 @@ public class AdherentPage {
         ajouterButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AdherentAjout ajoutPage = new AdherentAjout();
+                AuteurAjout ajoutPage = new AuteurAjout();
                 ajoutPage.initialize();
             }
         });
@@ -45,7 +45,7 @@ public class AdherentPage {
         supprimerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AdherentSupprimer supprimerPage = new AdherentSupprimer();
+                AuteurSupprimer supprimerPage = new AuteurSupprimer();
                 supprimerPage.initialize();
             }
         });
@@ -53,7 +53,7 @@ public class AdherentPage {
         modifierButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AdherentModifier modifierPage = new AdherentModifier();
+                AuteurModifier modifierPage = new AuteurModifier();
                 modifierPage.initialize();
             }
         });
@@ -61,7 +61,7 @@ public class AdherentPage {
         rafraichirButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                afficherDonneesAdherents(); // Rafraîchir les données
+                afficherDonneesAuteurs(); // Rafraîchir les données
             }
         });
 
@@ -73,12 +73,11 @@ public class AdherentPage {
         panel.add(buttonPanel, BorderLayout.NORTH);
 
         tableModel = new DefaultTableModel();
-        tableModel.addColumn("ID Adhérent");
+        tableModel.addColumn("ID Auteur");
         tableModel.addColumn("Nom");
         tableModel.addColumn("Prénom");
-        tableModel.addColumn("Email");
-        tableModel.addColumn("Adresse");
-        tableModel.addColumn("Nb Emprunt");
+        tableModel.addColumn("Date de naissance");
+        tableModel.addColumn("Description");
         table = new JTable(tableModel) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -90,10 +89,10 @@ public class AdherentPage {
         TableColumn column;
         for (int i = 0; i < table.getColumnCount(); i++) {
             column = table.getColumnModel().getColumn(i);
-            if (i == 0 || i == 5) {
+            if (i == 0) {
                 column.setPreferredWidth(80); // Largeur de la première colonne et de la dernière colonne
             } else if (i == 3 || i == 4) {
-                column.setPreferredWidth(250); // Largeur des colonnes des adresses et des emails
+                column.setPreferredWidth(250); // Largeur des colonnes des descriptions et des dateNaissances
             } else {
                 column.setPreferredWidth(100); // Largeur par défaut pour les autres colonnes
             }
@@ -108,51 +107,50 @@ public class AdherentPage {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
-        // Afficher les données de la table adherent dans le tableau lors de
+        // Afficher les données de la table auteur dans le tableau lors de
         // l'initialisation
-        afficherDonneesAdherents();
+        afficherDonneesAuteurs();
     }
 
-    private void afficherDonneesAdherents() {
+    private void afficherDonneesAuteurs() {
         // Effacer les données existantes du tableau
         tableModel.setRowCount(0);
-
+    
         try {
             // Connexion à la base de données
             Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-
-            // Création de la requête SQL pour sélectionner toutes les colonnes de la table
-            // Adherent
-            String sql = "SELECT * FROM adherent";
-
+    
+            // Création de la requête SQL pour sélectionner toutes les colonnes de la table Auteur
+            String sql = "SELECT * FROM auteur";
+    
             // Création de la déclaration PreparedStatement pour exécuter la requête
             try (PreparedStatement stmt = conn.prepareStatement(sql);
                     ResultSet rs = stmt.executeQuery()) {
-
+    
                 // Itération sur les résultats de la requête
                 while (rs.next()) {
                     // Récupération des valeurs de chaque colonne
-                    int Adh_num = rs.getInt("Adh_num");
+                    int aut_num = rs.getInt("Aut_num");
                     String nom = rs.getString("nom");
                     String prenom = rs.getString("prenom");
-                    String email = rs.getString("email");
-                    String adresse = rs.getString("adresse");
-                    int nb_emprunt = rs.getInt("nb_emprunt");
-
+                    String dateNaissance = rs.getString("date_naissance");
+                    String description = rs.getString("description");
+    
                     // Ajout des valeurs au tableau
-                    tableModel.addRow(new Object[] { Adh_num, nom, prenom, email, adresse, nb_emprunt });
+                    tableModel.addRow(new Object[] { aut_num, nom, prenom, dateNaissance, description });
                 }
             }
-
+    
             // Fermeture de la connexion
             conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+    
 
     public static void main(String[] args) {
-        AdherentPage adherentPage = new AdherentPage();
-        adherentPage.initialize();
+        AuteurPage auteurPage = new AuteurPage();
+        auteurPage.initialize();
     }
 }

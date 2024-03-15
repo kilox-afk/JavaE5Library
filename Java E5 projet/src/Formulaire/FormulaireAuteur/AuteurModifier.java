@@ -1,4 +1,4 @@
-package Formulaire.FormulaireAdherent;
+package Formulaire.FormulaireAuteur;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,21 +10,21 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class AdherentModifier {
+public class AuteurModifier {
     private static final String URL = "jdbc:mysql://localhost:3306/bibliotheques-java";
     private static final String USERNAME = "root";
     private static final String PASSWORD = "root";
 
     public void initialize() {
         // Création de la fenêtre Modifier
-        JFrame frame = new JFrame("Page Modifier (Adhérent)");
+        JFrame frame = new JFrame("Page Modifier (Auteur)");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         // Création du panneau principal avec BorderLayout
         JPanel panel = new JPanel(new BorderLayout());
 
         // Ajout d'un texte au-dessus du menu déroulant
-        JLabel label = new JLabel("Sélectionnez l'adhérent à modifier :", SwingConstants.CENTER);
+        JLabel label = new JLabel("Sélectionnez l'auteur à modifier :", SwingConstants.CENTER);
         label.setFont(label.getFont().deriveFont(Font.BOLD, 16)); // Agrandir le texte
         panel.add(label, BorderLayout.NORTH);
 
@@ -34,7 +34,7 @@ public class AdherentModifier {
 
         // Ajout d'un JComboBox pour permettre à l'utilisateur de sélectionner l'élément à modifier
         JComboBox<String> comboBox = new JComboBox<>();
-        // Remplir le JComboBox avec les adhérents, par exemple en récupérant depuis la base de données
+        // Remplir le JComboBox avec les auteurs, par exemple en récupérant depuis la base de données
         remplirComboBox(comboBox);
 
         // Ajout du JComboBox au panneau
@@ -49,13 +49,13 @@ public class AdherentModifier {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Récupérer l'élément sélectionné dans le JComboBox
-                String selectedAdherent = (String) comboBox.getSelectedItem();
-                if (!selectedAdherent.equals("--- Sélectionnez un adhérent à modifier ---")) {
-                    // Extraire l'ID de l'adhérent sélectionné
-                    String[] parts = selectedAdherent.split(":");
-                    int adherentId = Integer.parseInt(parts[0].trim());
-                    // Ouvrir l'interface de modification avec l'adhérent sélectionné
-                    ouvrirInterfaceModification(adherentId);
+                String selectedAuteur = (String) comboBox.getSelectedItem();
+                if (!selectedAuteur.equals("--- Sélectionnez un auteur à modifier ---")) {
+                    // Extraire l'ID de l'auteur sélectionné
+                    String[] parts = selectedAuteur.split(":");
+                    int auteurId = Integer.parseInt(parts[0].trim());
+                    // Ouvrir l'interface de modification avec l'auteur sélectionné
+                    ouvrirInterfaceModification(auteurId);
                     // Fermer la fenêtre après l'ouverture de l'interface de modification
                     frame.dispose();
                 }
@@ -80,17 +80,17 @@ public class AdherentModifier {
 
     private void remplirComboBox(JComboBox<String> comboBox) {
         // Ajouter la valeur par défaut au début de la liste
-        comboBox.addItem("--- Sélectionnez un adhérent à modifier --- ");
+        comboBox.addItem("--- Sélectionnez un auteur à modifier --- ");
 
         try (Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
-            String sql = "SELECT Adh_num, nom, prenom FROM adherent";
+            String sql = "SELECT Aut_num, nom, prenom FROM auteur";
             try (PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    int Adh_num = rs.getInt("Adh_num");
+                    int Aut_num = rs.getInt("Aut_num");
                     String nom = rs.getString("nom");
                     String prenom = rs.getString("prenom");
                     // Ajouter l'ID, le nom et le prénom à l'élément de la liste dans le JComboBox
-                    comboBox.addItem(Adh_num + ": " + nom + " " + prenom);
+                    comboBox.addItem(Aut_num + ": " + nom + " " + prenom);
                 }
             }
         } catch (SQLException e) {
@@ -98,15 +98,15 @@ public class AdherentModifier {
         }
     }
 
-    private void ouvrirInterfaceModification(int adherentId) {
+    private void ouvrirInterfaceModification(int auteurId) {
         // Créer une nouvelle instance de votre interface de modification
-        AdherentModificationInterface modificationInterface = new AdherentModificationInterface(adherentId);
+        AuteurModificationInterface modificationInterface = new AuteurModificationInterface(auteurId);
         // Appeler la méthode initialize() pour afficher l'interface de modification
         modificationInterface.initialize();
     }
 
     public static void main(String[] args) {
-        AdherentModifier adherentModifier = new AdherentModifier();
-        adherentModifier.initialize();
+        AuteurModifier auteurModifier = new AuteurModifier();
+        auteurModifier.initialize();
     }
 }

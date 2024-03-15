@@ -45,7 +45,7 @@ public class AdherentPage {
         supprimerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AdherentSupprimer supprimerPage = new AdherentSupprimer();
+                AuteurSupprimer supprimerPage = new AuteurSupprimer();
                 supprimerPage.initialize();
             }
         });
@@ -73,7 +73,7 @@ public class AdherentPage {
         panel.add(buttonPanel, BorderLayout.NORTH);
 
         tableModel = new DefaultTableModel();
-        tableModel.addColumn("ID Adhérent");
+        tableModel.addColumn("Adhérent");
         tableModel.addColumn("Nom");
         tableModel.addColumn("Prénom");
         tableModel.addColumn("Email");
@@ -104,7 +104,7 @@ public class AdherentPage {
         panel.add(scrollPane, BorderLayout.CENTER);
 
         frame.getContentPane().add(panel);
-        frame.setSize(1000, 700);
+        frame.setSize(800, 600);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 

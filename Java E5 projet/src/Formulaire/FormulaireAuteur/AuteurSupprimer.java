@@ -96,27 +96,19 @@ public class AuteurSupprimer {
     }
     
 
-    private void supprimerAuteur(String nomPrenomAuteur) throws SQLException {
-        // Extraire le nom et le prénom de l'élément sélectionné
-        String[] parts = nomPrenomAuteur.split(" ");
-        String nom = parts[0];
-        String prenom = parts[1];
-
-        // Connexion à la base de données
+    private void supprimerAuteur(String selectedItem) throws SQLException {
+        // Extraire l'ID de l'élément sélectionné dans le JComboBox
+        String autNum = selectedItem.split(":")[0].trim(); // Récupérer l'ID en tant que première partie de l'élément sélectionné
+        
         try (Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
-            // Création de la requête SQL DELETE pour supprimer l'auteur
-            String sql = "DELETE FROM auteur WHERE nom = ? AND prenom = ?";
+            String sql = "DELETE FROM auteur WHERE Aut_num = ?";
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                // Remplacer les paramètres ? par le nom et le prénom de l'auteur à supprimer
-                stmt.setString(1, nom);
-                stmt.setString(2, prenom);
-
-                // Exécuter la requête de suppression
+                stmt.setString(1, autNum);
                 int rowsAffected = stmt.executeUpdate();
                 if (rowsAffected > 0) {
                     JOptionPane.showMessageDialog(null, "Auteur supprimé avec succès.", "Succès", JOptionPane.INFORMATION_MESSAGE);
                 } else {
-                    JOptionPane.showMessageDialog(null, "Aucun auteur avec le nom et le prénom spécifiés trouvé.", "Avertissement", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Aucun auteur avec l'ID spécifié trouvé.", "Avertissement", JOptionPane.WARNING_MESSAGE);
                 }
             }
         }

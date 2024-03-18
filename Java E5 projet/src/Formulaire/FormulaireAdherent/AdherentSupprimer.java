@@ -96,27 +96,19 @@ public class AdherentSupprimer {
     }
     
 
-    private void supprimerAdherent(String nomPrenomAdherent) throws SQLException {
-        // Extraire le nom et le prénom de l'élément sélectionné
-        String[] parts = nomPrenomAdherent.split(" ");
-        String nom = parts[0];
-        String prenom = parts[1];
-
-        // Connexion à la base de données
+    private void supprimerAdherent(String selectedItem) throws SQLException {
+        // Extraire l'ID de l'élément sélectionné dans le JComboBox
+        String adhNum = selectedItem.split(":")[0].trim(); // Récupérer l'ID en tant que première partie de l'élément sélectionné
+        
         try (Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
-            // Création de la requête SQL DELETE pour supprimer l'adhérent
-            String sql = "DELETE FROM adherent WHERE nom = ? AND prenom = ?";
+            String sql = "DELETE FROM adherent WHERE Adh_num = ?";
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                // Remplacer les paramètres ? par le nom et le prénom de l'adhérent à supprimer
-                stmt.setString(1, nom);
-                stmt.setString(2, prenom);
-
-                // Exécuter la requête de suppression
+                stmt.setString(1, adhNum);
                 int rowsAffected = stmt.executeUpdate();
                 if (rowsAffected > 0) {
                     JOptionPane.showMessageDialog(null, "Adhérent supprimé avec succès.", "Succès", JOptionPane.INFORMATION_MESSAGE);
                 } else {
-                    JOptionPane.showMessageDialog(null, "Aucun adhérent avec le nom et le prénom spécifiés trouvé.", "Avertissement", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Aucun adhérent avec l'ID spécifié trouvé.", "Avertissement", JOptionPane.WARNING_MESSAGE);
                 }
             }
         }

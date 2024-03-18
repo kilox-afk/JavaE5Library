@@ -1,4 +1,4 @@
-package Formulaire.FormulaireAdherent;
+package Formulaire.FormulaireEmprunt;
 
 import javax.swing.*;
 import java.awt.*;
@@ -6,7 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
 
-public class AdherentSupprimer {
+public class EmpruntSupprimer {
     private static final String URL = "jdbc:mysql://localhost:3306/bibliotheques-java";
     private static final String USERNAME = "root";
     private static final String PASSWORD = "root";

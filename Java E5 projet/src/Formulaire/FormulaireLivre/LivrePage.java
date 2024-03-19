@@ -1,4 +1,4 @@
-package Formulaire.FormulaireAdherent;
+package Formulaire.FormulaireLivre;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -12,7 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class AdherentPage {
+public class LivrePage {
     private JTable table;
     private DefaultTableModel tableModel;
 
@@ -37,7 +37,7 @@ public class AdherentPage {
         ajouterButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AdherentAjout ajoutPage = new AdherentAjout();
+                LivreAjout ajoutPage = new LivreAjout();
                 ajoutPage.initialize();
             }
         });
@@ -45,7 +45,7 @@ public class AdherentPage {
         supprimerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AdherentSupprimer supprimerPage = new AdherentSupprimer();
+                LivreSupprimer supprimerPage = new LivreSupprimer();
                 supprimerPage.initialize();
             }
         });
@@ -53,7 +53,7 @@ public class AdherentPage {
         modifierButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AdherentModifier modifierPage = new AdherentModifier();
+                LivreModifier modifierPage = new LivreModifier();
                 modifierPage.initialize();
             }
         });
@@ -73,13 +73,12 @@ public class AdherentPage {
         panel.add(buttonPanel, BorderLayout.NORTH);
 
         tableModel = new DefaultTableModel();
-        tableModel.addColumn("ID Adhérent");
+        tableModel.addColumn("Adhérent");
         tableModel.addColumn("Nom");
         tableModel.addColumn("Prénom");
         tableModel.addColumn("Email");
         tableModel.addColumn("Adresse");
         tableModel.addColumn("Nb Emprunt");
-        tableModel.addColumn("Mot de passe"); // Ajout de la colonne "Mot de passe"
         table = new JTable(tableModel) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -105,7 +104,7 @@ public class AdherentPage {
         panel.add(scrollPane, BorderLayout.CENTER);
 
         frame.getContentPane().add(panel);
-        frame.setSize(1000, 700);
+        frame.setSize(800, 600);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
@@ -139,10 +138,9 @@ public class AdherentPage {
                     String email = rs.getString("email");
                     String adresse = rs.getString("adresse");
                     int nb_emprunt = rs.getInt("nb_emprunt");
-                    String motDePasse = rs.getString("mot_de_passe"); // Récupération du mot de passe
 
                     // Ajout des valeurs au tableau
-                    tableModel.addRow(new Object[] { Adh_num, nom, prenom, email, adresse, nb_emprunt, motDePasse });
+                    tableModel.addRow(new Object[] { Adh_num, nom, prenom, email, adresse, nb_emprunt });
                 }
             }
 
@@ -154,7 +152,7 @@ public class AdherentPage {
     }
 
     public static void main(String[] args) {
-        AdherentPage adherentPage = new AdherentPage();
+        LivrePage adherentPage = new LivrePage();
         adherentPage.initialize();
     }
 }

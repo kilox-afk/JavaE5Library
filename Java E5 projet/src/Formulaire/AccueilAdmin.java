@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 
 import Formulaire.FormulaireAdherent.AdherentPage;
 import Formulaire.FormulaireAuteur.AuteurPage;
+import Formulaire.FormulaireEmprunt.EmpruntPage;
+import Formulaire.FormulaireLivre.LivrePage;
 
 public class AccueilAdmin {
     public void initialize() {
@@ -53,6 +55,26 @@ public class AccueilAdmin {
                 // Afficher la page Adhérent
                 AuteurPage auteurPage = new AuteurPage();
                 auteurPage.initialize();
+            }
+        });
+
+        // Ajout des écouteurs d'événements aux boutons
+        formulaire3Button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Afficher la page Adhérent
+                EmpruntPage empruntPage = new EmpruntPage();
+                empruntPage.initialize();
+            }
+        });
+
+        // Ajout des écouteurs d'événements aux boutons
+        formulaire4Button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Afficher la page Adhérent
+                LivrePage livrePage = new LivrePage();
+                livrePage.initialize();
             }
         });
 

@@ -1,13 +1,14 @@
-package Formulaire.FormulaireAdherent;
+package Formulaire.FormulaireLivre;
 
 import javax.swing.*;
 import java.awt.*;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-public class AdherentModificationInterface {
+public class LivreModificationInterface {
     private static final String URL = "jdbc:mysql://localhost:3306/bibliotheques-java";
     private static final String USERNAME = "root";
     private static final String PASSWORD = "root";
@@ -19,11 +20,10 @@ public class AdherentModificationInterface {
     private JTextField emailTextField;
     private JTextField adresseTextField;
     private JTextField nbEmpruntTextField;
-    private JPasswordField passwordField;
 
     private int adherentId;
 
-    public AdherentModificationInterface(int adherentId) {
+    public LivreModificationInterface(int adherentId) {
         this.adherentId = adherentId;
     }
 
@@ -66,25 +66,28 @@ public class AdherentModificationInterface {
         addComponent(panel, nbEmpruntLabel, constraints, 0, 5, 1, 1);
         addComponent(panel, nbEmpruntTextField, constraints, 1, 5, 1, 1);
 
-        JLabel passwordLabel = new JLabel("Mot de passe:");
-        passwordField = new JPasswordField(20);
-        addComponent(panel, passwordLabel, constraints, 0, 6, 1, 1);
-        addComponent(panel, passwordField, constraints, 1, 6, 1, 1);
-
         JButton validerButton = new JButton("Valider");
         validerButton.addActionListener(e -> modifierAdherent());
-        addComponent(panel, validerButton, constraints, 0, 7, 2, 1);
+        addComponent(panel, validerButton, constraints, 0, 6, 2, 1);
 
+        // Charger les détails de l'adhérent depuis la base de données
         chargerDetailsAdherent();
 
+        // Ajout du panneau principal à la fenêtre
         frame.getContentPane().add(panel);
-        frame.setSize(400, 350);
+
+        // Ajustement de la taille de la fenêtre
+        frame.setSize(400, 300);
+
+        // Centrer la fenêtre
         frame.setLocationRelativeTo(null);
+
+        // Rendre la fenêtre visible
         frame.setVisible(true);
     }
 
     private void addComponent(JPanel panel, Component component, GridBagConstraints constraints, int gridx, int gridy,
-            int gridwidth, int gridheight) {
+                              int gridwidth, int gridheight) {
         constraints.gridx = gridx;
         constraints.gridy = gridy;
         constraints.gridwidth = gridwidth;
@@ -113,27 +116,22 @@ public class AdherentModificationInterface {
     }
 
     private void modifierAdherent() {
+        // Récupérer les valeurs des champs
         String nouveauNom = nomTextField.getText();
         String nouveauPrenom = prenomTextField.getText();
         String nouvelEmail = emailTextField.getText();
         String nouvelleAdresse = adresseTextField.getText();
         int nouveauNbEmprunt = Integer.parseInt(nbEmpruntTextField.getText());
-        char[] passwordChars = passwordField.getPassword();
-        String motDePasse = new String(passwordChars);
-                // Hacher le mot de passe
-        String mdpHash = hashPassword(motDePasse);
-
 
         try (Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
-            String sql = "UPDATE adherent SET nom = ?, prenom = ?, email = ?, adresse = ?, nb_emprunt = ?, mot_de_passe = ? WHERE Adh_num = ?";
+            String sql = "UPDATE adherent SET nom = ?, prenom = ?, email = ?, adresse = ?, nb_emprunt = ? WHERE Adh_num = ?";
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setString(1, nouveauNom);
                 stmt.setString(2, nouveauPrenom);
                 stmt.setString(3, nouvelEmail);
                 stmt.setString(4, nouvelleAdresse);
                 stmt.setInt(5, nouveauNbEmprunt);
-                stmt.setString(6, mdpHash);
-                stmt.setInt(7, adherentId);
+                stmt.setInt(6, adherentId);
 
                 int rowsAffected = stmt.executeUpdate();
                 if (rowsAffected > 0) {
@@ -147,23 +145,6 @@ public class AdherentModificationInterface {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-
-    }
-
-    // Méthode pour hacher le mot de passe
-    private String hashPassword(String password) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            byte[] messageDigest = md.digest(password.getBytes());
-            BigInteger no = new BigInteger(1, messageDigest);
-            String hashText = no.toString(16);
-            while (hashText.length() < 32) {
-                hashText = "0" + hashText;
-            }
-            return hashText;
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
         }
     }
 }

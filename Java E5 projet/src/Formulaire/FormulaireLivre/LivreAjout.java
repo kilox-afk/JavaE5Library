@@ -1,16 +1,13 @@
-package Formulaire.FormulaireAdherent;
+package Formulaire.FormulaireLivre;
 
 import javax.swing.*;
 import java.awt.*;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class AdherentAjout {
+public class LivreAjout {
     private static final String URL = "jdbc:mysql://localhost:3306/bibliotheques-java";
     private static final String USERNAME = "root";
     private static final String PASSWORD = "root";
@@ -22,7 +19,6 @@ public class AdherentAjout {
     private JTextField champ3Field;
     private JTextField champ4Field;
     private JTextField champ5Field;
-    private JPasswordField mdpField; // Champ pour le mot de passe
 
     public void initialize() {
         // Création de la fenêtre Ajouter
@@ -63,20 +59,15 @@ public class AdherentAjout {
         addComponent(panel, champ5Label, constraints, 0, 5, 1, 1);
         addComponent(panel, champ5Field, constraints, 1, 5, 1, 1);
 
-        JLabel mdpLabel = new JLabel("Mot de passe:"); // Label pour le champ du mot de passe
-        mdpField = new JPasswordField(20); // Champ pour le mot de passe
-        addComponent(panel, mdpLabel, constraints, 0, 6, 1, 1);
-        addComponent(panel, mdpField, constraints, 1, 6, 1, 1);
-
         JButton validerButton = new JButton("Valider");
         validerButton.addActionListener(e -> validerFormulaire());
-        addComponent(panel, validerButton, constraints, 0, 7, 1, 1);
+        addComponent(panel, validerButton, constraints, 0, 6, 1, 1);
 
         // Ajout du panneau principal à la fenêtre
         frame.getContentPane().add(panel);
 
         // Ajustement de la taille de la fenêtre du formulaire
-        frame.setSize(400, 350); // Vous pouvez ajuster la taille selon vos besoins
+        frame.setSize(400, 300); // Vous pouvez ajuster la taille selon vos besoins
 
         // Centrer la fenêtre
         frame.setLocationRelativeTo(null);
@@ -101,13 +92,9 @@ public class AdherentAjout {
         String email = champ3Field.getText();
         String adresse = champ4Field.getText();
         String nb_empruntText = champ5Field.getText();
-        String mdp = new String(mdpField.getPassword()); // Récupérer le mot de passe
-        // Hacher le mot de passe
-        String mdpHash = hashPassword(mdp);
 
         // Vérifier si les champs sont vides
-        if (nom.isEmpty() || prenom.isEmpty() || email.isEmpty() || adresse.isEmpty() || nb_empruntText.isEmpty()
-                || mdpHash.isEmpty()) {
+        if (nom.isEmpty() || prenom.isEmpty() || email.isEmpty() || adresse.isEmpty() || nb_empruntText.isEmpty()) {
             // Afficher un message d'erreur si un champ est vide
             JOptionPane.showMessageDialog(null, "Veuillez remplir tous les champs.", "Erreur",
                     JOptionPane.ERROR_MESSAGE);
@@ -129,7 +116,7 @@ public class AdherentAjout {
         // avec l'insertion des données dans la base de données
         try (Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
             // Création de la requête SQL d'insertion
-            String sql = "INSERT INTO adherent (nom, prenom, email, adresse, nb_emprunt, mot_de_passe) VALUES (?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO adherent (nom, prenom, email, adresse, nb_emprunt) VALUES (?, ?, ?, ?, ?)";
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 // Remplacer les paramètres ? par les valeurs des champs
                 stmt.setString(1, nom);
@@ -137,7 +124,6 @@ public class AdherentAjout {
                 stmt.setString(3, email);
                 stmt.setString(4, adresse);
                 stmt.setInt(5, nb_emprunt);
-                stmt.setString(6, mdpHash); // Mot de passe hash
 
                 // Exécuter la requête d'insertion
                 int rowsAffected = stmt.executeUpdate();
@@ -156,24 +142,8 @@ public class AdherentAjout {
         }
     }
 
-    // Méthode pour hacher le mot de passe
-    public static String hashPassword(String password) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            byte[] messageDigest = md.digest(password.getBytes());
-            BigInteger no = new BigInteger(1, messageDigest);
-            String hashText = no.toString(16);
-            while (hashText.length() < 32) {
-                hashText = "0" + hashText;
-            }
-            return hashText;
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public static void main(String[] args) {
-        AdherentAjout adherentAjout = new AdherentAjout();
+        LivreAjout adherentAjout = new LivreAjout();
         adherentAjout.initialize();
     }
 }

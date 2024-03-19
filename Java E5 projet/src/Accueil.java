@@ -1,7 +1,7 @@
 import javax.swing.*;
 
 import Formulaire.AccueilAdmin;
-import UserEmprunt.userAccueil;
+import UserEmprunt.userLogin;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -76,7 +76,7 @@ public class Accueil {
     private void redirectToUserAccueil() {
         // Créer une instance de la classe userAccueil et appeler la méthode
         // initialize() pour afficher l'interface user
-        userAccueil userPage = new userAccueil();
+        userLogin userPage = new userLogin();
         userPage.initialize();
     }
 

@@ -1,7 +1,7 @@
 import javax.swing.*;
 
-import Formulaire.AccueilAdmin;
-import UserEmprunt.userLogin;
+import AdminInterface.AccueilAdmin;
+import UserInterface.userLogin;
 
 import java.awt.*;
 import java.awt.event.*;

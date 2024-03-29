@@ -2,7 +2,7 @@ package UserInterface;
 
 import javax.swing.*;
 
-import AdminInterface.AdminAdherent.AdherentAjout;
+import AdminInterface.AdminAdherent.AdminAdherentAjout;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -21,47 +21,49 @@ public class userLogin {
         // Création de la fenêtre de connexion pour l'utilisateur
         frame = new JFrame("Connexion Utilisateur");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        // Création du panneau principal avec un gestionnaire de disposition
-        // BorderLayout
+    
+        // Création du panneau principal avec un gestionnaire de disposition BorderLayout
         JPanel panel = new JPanel(new BorderLayout());
-
-        // Création du panneau pour les champs de saisie
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Ajout de marges
+    
+        // Création du panneau pour les champs de saisie avec un gestionnaire de disposition FlowLayout
         JPanel inputPanel = new JPanel(new GridLayout(2, 2, 5, 5));
-
+        inputPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Ajout de marges
+    
         // Ajout des champs de saisie et des étiquettes au panneau
         JLabel usernameLabel = new JLabel("Numéro utilisateur:");
         usernameField = new JTextField(20);
         JLabel passwordLabel = new JLabel("Mot de passe:");
         passwordField = new JPasswordField(20);
-
+    
         inputPanel.add(usernameLabel);
         inputPanel.add(usernameField);
         inputPanel.add(passwordLabel);
         inputPanel.add(passwordField);
-
+    
         // Création du bouton de connexion
         JButton loginButton = new JButton("Se connecter");
+        loginButton.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Ajout de marges
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 seConnecter();
             }
         });
-
+    
         // Ajout du panneau de saisie et du bouton de connexion au panneau principal
         panel.add(inputPanel, BorderLayout.CENTER);
         panel.add(loginButton, BorderLayout.SOUTH);
-
+    
         // Ajout du panneau principal à la fenêtre
         frame.getContentPane().add(panel);
-
+    
         // Ajustement de la taille de la fenêtre
-        frame.setSize(400, 150);
-
+        frame.setSize(400, 200); // Taille ajustée pour mieux s'adapter aux composants
+    
         // Centrer la fenêtre sur l'écran
         frame.setLocationRelativeTo(null);
-
+    
         // Rendre la fenêtre visible
         frame.setVisible(true);
     }
@@ -78,10 +80,8 @@ public class userLogin {
                 stmt.setString(1, username);
                 try (ResultSet rs = stmt.executeQuery()) {
                     if (rs.next()) {
-                        String storedPasswordHash = rs.getString("mot_de_passe"); // Récupérer le mot de passe haché
-                                                                                  // depuis la base de données
-                        String hashedPassword = AdherentAjout.hashPassword(password); // Appeler la méthode hashPassword
-                                                                                      // statique
+                        String storedPasswordHash = rs.getString("mot_de_passe"); // Récupérer le mot de passe haché depuis la base de données
+                        String hashedPassword = AdminAdherentAjout.hashPassword(password); // Appeler la méthode hashPassword statique
                         if (storedPasswordHash.equals(hashedPassword)) {
                             // Afficher un message de connexion réussie
                             JOptionPane.showMessageDialog(frame, "Connexion réussie !", "Succès",

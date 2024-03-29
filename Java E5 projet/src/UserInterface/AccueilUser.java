@@ -1,12 +1,16 @@
 package UserInterface;
 
+import UserInterface.UserAuteur.UserAuteurPage;
+import UserInterface.UserEmprunt.UserEmpruntPage;
+import UserInterface.UserLivre.UserLivrePage;
+
 import javax.swing.*;
-import UserInterface.UserEmprunt.EmpruntPage;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class AccueilUser {
+    @SuppressWarnings("unused")
     private String adherentId;
 
     public void initialize(String adherentId) {
@@ -21,7 +25,8 @@ public class AccueilUser {
 
         // Création du panneau pour les boutons avec une marge autour
         JPanel buttonPanel = new JPanel(new GridLayout(3, 1, 10, 10));
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Ajout d'un espace autour du panneau de boutons
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Ajout d'un espace autour du panneau
+                                                                                // de boutons
 
         // Création des boutons pour chaque catégorie de gestion
         JButton formulaire1Button = new JButton("Gestion Auteur");
@@ -35,12 +40,32 @@ public class AccueilUser {
         formulaire3Button.setPreferredSize(buttonSize);
 
         // Ajout des écouteurs d'événements aux boutons
+        formulaire1Button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Afficher la page auteurPage en passant l'identifiant de l'adhérent
+                UserAuteurPage auteurPage = new UserAuteurPage();
+                auteurPage.initialize(adherentId);
+            }
+        });
+
+        // Ajout des écouteurs d'événements aux boutons
         formulaire2Button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Afficher la page EmpruntPage en passant l'identifiant de l'adhérent
-                EmpruntPage empruntPage = new EmpruntPage();
+                UserEmpruntPage empruntPage = new UserEmpruntPage();
                 empruntPage.initialize(adherentId);
+            }
+        });
+
+        // Ajout des écouteurs d'événements aux boutons
+        formulaire3Button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Afficher la page livrePage en passant l'identifiant de l'adhérent
+                UserLivrePage livrePage = new UserLivrePage();
+                livrePage.initialize(adherentId);
             }
         });
 

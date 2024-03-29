@@ -2,10 +2,10 @@ package AdminInterface;
 
 import javax.swing.*;
 
-import AdminInterface.AdminAdherent.AdherentPage;
-import AdminInterface.AdminAuteur.AuteurPage;
-import AdminInterface.AdminEmprunt.EmpruntPage;
-import AdminInterface.AdminLivre.LivrePage;
+import AdminInterface.AdminAdherent.AdminAdherentPage;
+import AdminInterface.AdminAuteur.AdminAuteurPage;
+import AdminInterface.AdminEmprunt.AdminEmpruntPage;
+import AdminInterface.AdminLivre.AdminLivrePage;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -44,7 +44,7 @@ public class AccueilAdmin {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Afficher la page Adhérent
-                AdherentPage adherentPage = new AdherentPage();
+                AdminAdherentPage adherentPage = new AdminAdherentPage();
                 adherentPage.initialize();
             }
         });
@@ -54,7 +54,7 @@ public class AccueilAdmin {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Afficher la page Adhérent
-                AuteurPage auteurPage = new AuteurPage();
+                AdminAuteurPage auteurPage = new AdminAuteurPage();
                 auteurPage.initialize();
             }
         });
@@ -64,7 +64,7 @@ public class AccueilAdmin {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Afficher la page Adhérent
-                EmpruntPage empruntPage = new EmpruntPage();
+                AdminEmpruntPage empruntPage = new AdminEmpruntPage();
                 empruntPage.initialize();
             }
         });
@@ -74,7 +74,7 @@ public class AccueilAdmin {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Afficher la page Adhérent
-                LivrePage livrePage = new LivrePage();
+                AdminLivrePage livrePage = new AdminLivrePage();
                 livrePage.initialize();
             }
         });
